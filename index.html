@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <button onclick="getKey()">Generate Key</button>
+    <p id="result"></p>
+
+    <script>
+        async function getKey() {
+            const res = await fetch('https://s3-hacks-get-key-production.up.railway.app/generate_key.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({days: 2})
+            });
+            const data = await res.json();
+            document.getElementById('result').innerText = "Key: " + data.key;
+        }
+    </script>
+</body>
+</html>
