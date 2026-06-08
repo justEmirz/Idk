@@ -323,19 +323,24 @@
             border-top: 2px solid #e0e0e0;
             text-align: center;
             font-size: 12px;
-            color: #999;
+            color: #666;
         }
 
         .demo-credentials p {
-            margin: 4px 0;
+            margin: 6px 0;
+        }
+
+        .demo-credentials strong {
+            color: #333;
         }
 
         .demo-credentials code {
             background: #f0f0f0;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
             color: #333;
+            font-weight: 600;
         }
 
         @media (max-width: 600px) {
@@ -396,7 +401,7 @@
             <div class="status-message" id="loginStatus"></div>
 
             <div class="demo-credentials">
-                <p>💡 <strong>Demo Credentials:</strong></p>
+                <p>💡 <strong>Demo Admin Credentials:</strong></p>
                 <p>Username: <code>admin</code></p>
                 <p>Password: <code>Admin123!</code></p>
             </div>
@@ -452,9 +457,9 @@
         let currentKey = '';
         let currentUser = null;
 
-        // Admin credentials (hardcoded for security - only admin can login)
+        // Admin credentials - SIMPLE AND DIRECT (no encryption)
         const ADMIN_USERNAME = 'admin';
-        const ADMIN_PASSWORD = btoa('Admin123!'); // Password stored as base64
+        const ADMIN_PASSWORD = 'Admin123!';
 
         const loggedInUser = localStorage.getItem('loggedInUser');
 
@@ -482,22 +487,27 @@
             const password = document.getElementById('loginPassword').value;
             const statusEl = document.getElementById('loginStatus');
 
+            console.log('Login attempt:', { username, password });
+
             if (!username || !password) {
-                showStatusMessage(statusEl, 'Please enter username and password', 'error');
+                showStatusMessage(statusEl, '❌ Please enter username and password', 'error');
                 return;
             }
 
-            // Check admin credentials
-            if (username === ADMIN_USERNAME && btoa(password) === ADMIN_PASSWORD) {
+            // Simple direct comparison
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
                 // Login successful
                 currentUser = { username, role: 'admin' };
                 localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
-                showStatusMessage(statusEl, '✓ Admin login successful!', 'success');
+                showStatusMessage(statusEl, '✅ Admin login successful!', 'success');
                 
                 setTimeout(() => {
                     showAppSection();
                 }, 1000);
             } else {
+                console.log('Login failed - checking details:');
+                console.log('Username match:', username === ADMIN_USERNAME);
+                console.log('Password match:', password === ADMIN_PASSWORD);
                 showStatusMessage(statusEl, '❌ Invalid admin credentials', 'error');
             }
         }
@@ -553,14 +563,14 @@
                     currentKey = data.key;
                     document.getElementById('result').innerText = data.key;
                     resultBox.classList.add('show');
-                    showStatusMessage(statusMessage, '✓ Key generated successfully!', 'success');
+                    showStatusMessage(statusMessage, '✅ Key generated successfully!', 'success');
                     document.getElementById('copyBtn').disabled = false;
                 } else {
                     throw new Error('No key received from server');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showStatusMessage(statusMessage, `Failed to generate key: ${error.message}`, 'error');
+                showStatusMessage(statusMessage, `❌ Failed to generate key: ${error.message}`, 'error');
                 document.getElementById('copyBtn').disabled = true;
             } finally {
                 generateBtn.disabled = false;
@@ -578,7 +588,7 @@
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy:', err);
-                showStatusMessage(document.getElementById('statusMessage'), 'Failed to copy to clipboard', 'error');
+                showStatusMessage(document.getElementById('statusMessage'), '❌ Failed to copy to clipboard', 'error');
             });
         }
 
