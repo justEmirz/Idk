@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Key Generator - Admin</title>
+    <title>Key Generator - Secure System</title>
     <style>
         * {
             margin: 0;
@@ -26,7 +26,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             padding: 40px;
-            max-width: 500px;
+            max-width: 900px;
             width: 100%;
             animation: slideUp 0.5s ease-out;
         }
@@ -58,15 +58,57 @@
             font-size: 14px;
         }
 
-        .admin-badge {
+        .badge {
             display: inline-block;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 11px;
             font-weight: 600;
             margin-top: 8px;
+            color: white;
+        }
+
+        .badge-admin {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .badge-user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            color: #999;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideUp 0.3s ease-out;
         }
 
         .form-group {
@@ -84,7 +126,8 @@
         input[type="text"],
         input[type="password"],
         input[type="number"],
-        input[type="email"] {
+        input[type="email"],
+        select {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
@@ -94,10 +137,8 @@
             font-family: inherit;
         }
 
-        input[type="text"]:focus,
-        input[type="password"]:focus,
-        input[type="number"]:focus,
-        input[type="email"]:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -150,10 +191,6 @@
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
         .btn-primary:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -168,85 +205,28 @@
 
         .btn-secondary:hover {
             background: #e0e0e0;
-            border-color: #d0d0d0;
         }
 
-        .btn-secondary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-logout {
+        .btn-danger {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
-            margin-top: 10px;
         }
 
-        .btn-logout:hover {
+        .btn-danger:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
         }
 
-        .result-section {
-            margin-top: 30px;
-        }
-
-        .result-box {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            border-radius: 10px;
-            min-height: 80px;
-            display: none;
-        }
-
-        .result-box.show {
-            display: block;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        .result-label {
-            color: #666;
+        .btn-small {
+            flex: unset;
+            padding: 8px 12px;
             font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        .result-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .result-text {
-            flex: 1;
-            color: #333;
-            font-size: 16px;
-            font-weight: 600;
-            word-break: break-all;
-            font-family: 'Courier New', monospace;
-        }
-
-        .copy-indicator {
-            color: #22c55e;
-            font-size: 12px;
-            font-weight: 600;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .copy-indicator.show {
-            display: block;
-            opacity: 1;
+            margin: 0 5px 0 0;
         }
 
         .status-message {
-            text-align: center;
             margin-top: 15px;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             font-size: 13px;
             font-weight: 500;
@@ -290,6 +270,15 @@
             to { transform: rotate(360deg); }
         }
 
+        .user-info {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid #667eea;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
         .admin-info {
             background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
             border: 2px solid #f093fb;
@@ -299,66 +288,184 @@
             text-align: center;
         }
 
-        .admin-info p {
+        .info p {
             color: #333;
             font-size: 14px;
             margin: 5px 0;
             font-weight: 600;
         }
 
-        .admin-info .badge {
+        .info .badge {
             display: inline-block;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
             margin-top: 8px;
         }
 
-        .demo-credentials {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 2px solid #e0e0e0;
-            text-align: center;
+        .result-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .result-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .result-text {
+            flex: 1;
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+        }
+
+        .copy-indicator {
+            color: #22c55e;
+            font-size: 12px;
+            font-weight: 600;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .copy-indicator.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .expiry-info {
             font-size: 12px;
             color: #666;
+            margin-top: 10px;
         }
 
-        .demo-credentials p {
-            margin: 6px 0;
-        }
-
-        .demo-credentials strong {
-            color: #333;
-        }
-
-        .demo-credentials code {
-            background: #f0f0f0;
-            padding: 3px 8px;
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
             border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            color: #333;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .key-item {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .key-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .key-user {
             font-weight: 600;
+            color: #333;
+        }
+
+        .key-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .status-active {
+            background: #22c55e;
+        }
+
+        .status-revoked {
+            background: #ef4444;
+        }
+
+        .status-expired {
+            background: #f59e0b;
+        }
+
+        .key-value {
+            font-family: 'Courier New', monospace;
+            color: #666;
+            font-size: 12px;
+            word-break: break-all;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .key-info {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .key-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .security-warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         @media (max-width: 600px) {
             .container {
-                padding: 25px;
+                padding: 20px;
             }
 
-            .header h1 {
-                font-size: 24px;
+            .grid-2 {
+                grid-template-columns: 1fr;
             }
 
-            button {
-                padding: 12px 15px;
-                font-size: 14px;
-            }
-
-            .button-group {
+            .key-header {
                 flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
         }
     </style>
@@ -367,232 +474,597 @@
     <div class="container">
         <div class="header">
             <h1>🔑 Key Generator</h1>
-            <p>Secure Admin Key Generation</p>
-            <div class="admin-badge">⚙️ ADMIN PORTAL</div>
+            <p>Secure Key Management System</p>
         </div>
 
-        <!-- Auth Section -->
-        <div id="authSection">
-            <div class="form-group">
-                <label for="loginUsername">Admin Username</label>
-                <input 
-                    type="text" 
-                    id="loginUsername" 
-                    placeholder="Enter admin username"
-                    autocomplete="off"
-                >
+        <!-- Login Section -->
+        <div id="loginSection">
+            <div class="security-warning">
+                ⚠️ <strong>Security Notice:</strong> This is a frontend-only application. For production use, implement a backend server with proper authentication.
             </div>
 
-            <div class="form-group password-toggle">
-                <label for="loginPassword">Admin Password</label>
-                <input 
-                    type="password" 
-                    id="loginPassword" 
-                    placeholder="Enter admin password"
-                    autocomplete="off"
-                >
-                <span class="toggle-eye" onclick="togglePassword('loginPassword')">👁️</span>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchLoginTab('userLogin')">User Login</button>
+                <button class="tab-btn" onclick="switchLoginTab('adminLogin')">Admin Login</button>
             </div>
 
-            <button class="btn-primary" onclick="login()" style="width: 100%; margin-top: 20px;">
-                🔐 Login as Admin
-            </button>
+            <!-- User Login -->
+            <div id="userLogin" class="tab-content active">
+                <div class="form-group">
+                    <label for="userUsername">Username</label>
+                    <input type="text" id="userUsername" placeholder="Enter username">
+                </div>
 
-            <div class="status-message" id="loginStatus"></div>
+                <div class="form-group password-toggle">
+                    <label for="userPassword">Password</label>
+                    <input type="password" id="userPassword" placeholder="Enter password">
+                    <span class="toggle-eye" onclick="togglePassword('userPassword')">👁️</span>
+                </div>
 
-            <div class="demo-credentials">
-                <p>💡 <strong>Demo Admin Credentials:</strong></p>
-                <p>Username: <code>admin</code></p>
-                <p>Password: <code>Admin123!</code></p>
-            </div>
-        </div>
-
-        <!-- App Section (Hidden until logged in) -->
-        <div id="appSection" style="display: none;">
-            <div class="admin-info">
-                <p>🔒 Admin User: <strong id="currentUsername"></strong></p>
-                <div class="badge">ADMINISTRATOR ACCESS</div>
-            </div>
-
-            <div class="form-group">
-                <label for="daysInput">Validity Period (days)</label>
-                <input 
-                    type="number" 
-                    id="daysInput" 
-                    value="2" 
-                    min="1" 
-                    max="365"
-                    placeholder="Enter number of days"
-                >
-            </div>
-
-            <div class="button-group">
-                <button class="btn-primary" id="generateBtn" onclick="getKey()">
-                    Generate Key
+                <button class="btn-primary" onclick="userLogin()" style="width: 100%;">
+                    Login as User
                 </button>
-                <button class="btn-secondary" id="copyBtn" onclick="copyToClipboard()" disabled>
-                    📋 Copy
-                </button>
-            </div>
 
-            <div class="status-message" id="statusMessage"></div>
+                <div class="status-message" id="userLoginStatus"></div>
 
-            <div class="result-section">
-                <div class="result-box" id="resultBox">
-                    <div class="result-label">Generated Key</div>
-                    <div class="result-content">
-                        <div class="result-text" id="result"></div>
-                        <div class="copy-indicator" id="copyIndicator">Copied!</div>
-                    </div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0; font-size: 12px; color: #666;">
+                    <p><strong>Demo User:</strong></p>
+                    <p>Username: <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 4px;">user</code></p>
+                    <p>Password: <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 4px;">User123</code></p>
                 </div>
             </div>
 
-            <button class="btn-logout" onclick="logout()" style="width: 100%;">
+            <!-- Admin Login -->
+            <div id="adminLogin" class="tab-content">
+                <div class="form-group">
+                    <label for="adminUsername">Admin Username</label>
+                    <input type="text" id="adminUsername" placeholder="Enter admin username">
+                </div>
+
+                <div class="form-group password-toggle">
+                    <label for="adminPassword">Admin Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter admin password">
+                    <span class="toggle-eye" onclick="togglePassword('adminPassword')">👁️</span>
+                </div>
+
+                <button class="btn-primary" onclick="adminLogin()" style="width: 100%;">
+                    Login as Admin
+                </button>
+
+                <div class="status-message" id="adminLoginStatus"></div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0; font-size: 12px; color: #666;">
+                    <p><strong>Demo Admin:</strong></p>
+                    <p>Username: <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 4px;">admin</code></p>
+                    <p>Password: <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 4px;">Admin123!</code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Dashboard -->
+        <div id="userDashboard" style="display: none;">
+            <div class="user-info info">
+                <p>👤 Welcome, <strong id="userName"></strong>!</p>
+                <div class="badge badge-user">USER</div>
+            </div>
+
+            <div class="form-group">
+                <label for="userDaysInput">Validity Period (days)</label>
+                <input type="number" id="userDaysInput" value="2" min="1" max="365">
+            </div>
+
+            <button class="btn-primary" id="userGenerateBtn" onclick="userGenerateKey()" style="width: 100%;">
+                Generate Key
+            </button>
+
+            <div class="status-message" id="userStatus"></div>
+
+            <div class="result-box" id="userResultBox">
+                <div class="result-label">Generated Key</div>
+                <div class="result-content">
+                    <div class="result-text" id="userResultText"></div>
+                    <div class="copy-indicator" id="userCopyIndicator">Copied!</div>
+                </div>
+                <div class="expiry-info" id="userExpiryInfo"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="userProgressFill" style="width: 100%;"></div>
+                </div>
+                <button class="btn-secondary btn-small" onclick="userCopyKey()" style="margin-top: 10px; width: 100%;">
+                    📋 Copy Key
+                </button>
+            </div>
+
+            <button class="btn-danger" onclick="logout()" style="width: 100%; margin-top: 20px;">
                 🚪 Logout
             </button>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" style="display: none;">
+            <div class="admin-info info">
+                <p>🔒 Admin Panel - <strong id="adminName"></strong></p>
+                <div class="badge badge-admin">ADMINISTRATOR</div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchAdminTab('keysTab')">Key Management</button>
+                <button class="tab-btn" onclick="switchAdminTab('settingsTab')">Settings</button>
+            </div>
+
+            <!-- Keys Tab -->
+            <div id="keysTab" class="tab-content active">
+                <div class="form-group">
+                    <label for="adminDaysInput">Validity Period (days)</label>
+                    <input type="number" id="adminDaysInput" value="2" min="1" max="365">
+                </div>
+
+                <button class="btn-primary" id="adminGenerateBtn" onclick="adminGenerateKey()" style="width: 100%;">
+                    Generate Test Key
+                </button>
+
+                <div class="status-message" id="adminStatus"></div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px; color: #333;">📋 All Generated Keys</h3>
+                <div id="keysList"></div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content">
+                <h3 style="margin-bottom: 20px; color: #333;">⚙️ Admin Settings</h3>
+
+                <h4 style="margin-top: 20px; margin-bottom: 15px; color: #333;">Change Admin Username</h4>
+                <div class="form-group">
+                    <label for="newAdminUsername">New Username</label>
+                    <input type="text" id="newAdminUsername" placeholder="Enter new admin username">
+                </div>
+                <button class="btn-primary" onclick="changeAdminUsername()" style="width: 100%;">
+                    Update Username
+                </button>
+                <div class="status-message" id="usernameStatus"></div>
+
+                <h4 style="margin-top: 30px; margin-bottom: 15px; color: #333;">Change Admin Password</h4>
+                <div class="form-group password-toggle">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" placeholder="Enter current password">
+                    <span class="toggle-eye" onclick="togglePassword('currentPassword')">👁️</span>
+                </div>
+
+                <div class="form-group password-toggle">
+                    <label for="newAdminPassword">New Password</label>
+                    <input type="password" id="newAdminPassword" placeholder="Enter new password">
+                    <span class="toggle-eye" onclick="togglePassword('newAdminPassword')">👁️</span>
+                </div>
+
+                <div class="form-group password-toggle">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                    <span class="toggle-eye" onclick="togglePassword('confirmPassword')">👁️</span>
+                </div>
+
+                <button class="btn-primary" onclick="changeAdminPassword()" style="width: 100%;">
+                    Update Password
+                </button>
+                <div class="status-message" id="passwordStatus"></div>
+
+                <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
+
+                <button class="btn-danger" onclick="logout()" style="width: 100%;">
+                    🚪 Logout
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        let currentKey = '';
-        let currentUser = null;
+        // ==================== DATA MANAGEMENT ====================
+        const DB_KEY = 'keyGeneratorDB';
+        const ADMIN_KEY = 'adminCredentials';
+        const SESSION_KEY = 'currentSession';
 
-        // Admin credentials - SIMPLE AND DIRECT (no encryption)
-        const ADMIN_USERNAME = 'admin';
-        const ADMIN_PASSWORD = 'Admin123!';
+        // Default credentials
+        const DEFAULT_ADMIN = {
+            username: 'admin',
+            password: 'Admin123!'
+        };
 
-        const loggedInUser = localStorage.getItem('loggedInUser');
+        const DEFAULT_USER = {
+            username: 'user',
+            password: 'User123'
+        };
 
-        // Check if user is already logged in
-        if (loggedInUser) {
-            currentUser = JSON.parse(loggedInUser);
-            showAppSection();
+        // Initialize database
+        function initDatabase() {
+            if (!localStorage.getItem(DB_KEY)) {
+                localStorage.setItem(DB_KEY, JSON.stringify({
+                    keys: [],
+                    users: [DEFAULT_USER]
+                }));
+            }
+
+            if (!localStorage.getItem(ADMIN_KEY)) {
+                localStorage.setItem(ADMIN_KEY, JSON.stringify(DEFAULT_ADMIN));
+            }
+        }
+
+        // Get database
+        function getDB() {
+            return JSON.parse(localStorage.getItem(DB_KEY)) || { keys: [], users: [] };
+        }
+
+        // Save database
+        function saveDB(db) {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+        }
+
+        // Get admin credentials
+        function getAdminCreds() {
+            return JSON.parse(localStorage.getItem(ADMIN_KEY)) || DEFAULT_ADMIN;
+        }
+
+        // Save admin credentials
+        function saveAdminCreds(creds) {
+            localStorage.setItem(ADMIN_KEY, JSON.stringify(creds));
+        }
+
+        // Get current session
+        function getSession() {
+            const session = localStorage.getItem(SESSION_KEY);
+            return session ? JSON.parse(session) : null;
+        }
+
+        // Set session
+        function setSession(user, role) {
+            localStorage.setItem(SESSION_KEY, JSON.stringify({ user, role, timestamp: Date.now() }));
+        }
+
+        // Clear session
+        function clearSession() {
+            localStorage.removeItem(SESSION_KEY);
+        }
+
+        // ==================== AUTHENTICATION ====================
+        initDatabase();
+        const currentSession = getSession();
+
+        if (currentSession) {
+            if (currentSession.role === 'user') {
+                showUserDashboard();
+            } else if (currentSession.role === 'admin') {
+                showAdminDashboard();
+            }
         }
 
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);
             const eye = event.target;
-            
-            if (field.type === 'password') {
-                field.type = 'text';
-                eye.textContent = '👁️‍🗨️';
-            } else {
-                field.type = 'password';
-                eye.textContent = '👁️';
-            }
+            field.type = field.type === 'password' ? 'text' : 'password';
+            eye.textContent = field.type === 'password' ? '👁️' : '👁️‍🗨️';
         }
 
-        function login() {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const statusEl = document.getElementById('loginStatus');
+        function switchLoginTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+        }
 
-            console.log('Login attempt:', { username, password });
+        function switchAdminTab(tab) {
+            const tabs = document.querySelectorAll('#adminDashboard .tab-btn');
+            const contents = document.querySelectorAll('#adminDashboard .tab-content');
+            
+            contents.forEach(c => c.classList.remove('active'));
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+        }
+
+        function userLogin() {
+            const username = document.getElementById('userUsername').value.trim();
+            const password = document.getElementById('userPassword').value;
+            const statusEl = document.getElementById('userLoginStatus');
 
             if (!username || !password) {
-                showStatusMessage(statusEl, '❌ Please enter username and password', 'error');
+                showStatus(statusEl, '❌ Please enter username and password', 'error');
                 return;
             }
 
-            // Simple direct comparison
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                // Login successful
-                currentUser = { username, role: 'admin' };
-                localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
-                showStatusMessage(statusEl, '✅ Admin login successful!', 'success');
-                
-                setTimeout(() => {
-                    showAppSection();
-                }, 1000);
+            const db = getDB();
+            const user = db.users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                setSession(username, 'user');
+                showStatus(statusEl, '✅ Login successful!', 'success');
+                setTimeout(() => showUserDashboard(), 1000);
             } else {
-                console.log('Login failed - checking details:');
-                console.log('Username match:', username === ADMIN_USERNAME);
-                console.log('Password match:', password === ADMIN_PASSWORD);
-                showStatusMessage(statusEl, '❌ Invalid admin credentials', 'error');
+                showStatus(statusEl, '❌ Invalid username or password', 'error');
             }
+        }
+
+        function adminLogin() {
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            const statusEl = document.getElementById('adminLoginStatus');
+
+            if (!username || !password) {
+                showStatus(statusEl, '❌ Please enter username and password', 'error');
+                return;
+            }
+
+            const adminCreds = getAdminCreds();
+
+            if (username === adminCreds.username && password === adminCreds.password) {
+                setSession(username, 'admin');
+                showStatus(statusEl, '✅ Admin login successful!', 'success');
+                setTimeout(() => showAdminDashboard(), 1000);
+            } else {
+                showStatus(statusEl, '❌ Invalid admin credentials', 'error');
+            }
+        }
+
+        function showUserDashboard() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('userDashboard').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('userName').textContent = getSession().user;
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('userDashboard').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+            document.getElementById('adminName').textContent = getSession().user;
+            refreshKeysList();
         }
 
         function logout() {
-            localStorage.removeItem('loggedInUser');
-            currentUser = null;
-            currentKey = '';
-            document.getElementById('authSection').style.display = 'block';
-            document.getElementById('appSection').style.display = 'none';
-            document.getElementById('loginUsername').value = '';
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('statusMessage').innerHTML = '';
+            clearSession();
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('userDashboard').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.querySelectorAll('input[type="text"], input[type="password"], input[type="number"]').forEach(input => input.value = '');
         }
 
-        function showAppSection() {
-            document.getElementById('authSection').style.display = 'none';
-            document.getElementById('appSection').style.display = 'block';
-            document.getElementById('currentUsername').textContent = currentUser.username;
-        }
+        // ==================== KEY GENERATION ====================
+        let currentUserKey = null;
 
-        async function getKey() {
-            const daysInput = document.getElementById('daysInput');
-            const days = parseInt(daysInput.value) || 2;
-            
+        function userGenerateKey() {
+            const days = parseInt(document.getElementById('userDaysInput').value) || 2;
             if (days < 1 || days > 365) {
-                showStatusMessage(document.getElementById('statusMessage'), 'Please enter a value between 1 and 365 days', 'error');
+                showStatus(document.getElementById('userStatus'), '❌ Enter days between 1-365', 'error');
                 return;
             }
 
-            const generateBtn = document.getElementById('generateBtn');
-            const resultBox = document.getElementById('resultBox');
-            const statusMessage = document.getElementById('statusMessage');
-
-            generateBtn.disabled = true;
-            showStatusMessage(statusMessage, `<span class="spinner"></span>Generating key...`, 'loading');
-            resultBox.classList.remove('show');
-
-            try {
-                const res = await fetch('https://s3-hacks-get-key-production.up.railway.app/generate_key.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ days: days })
-                });
-
-                if (!res.ok) {
-                    throw new Error(`Server returned ${res.status}`);
-                }
-
-                const data = await res.json();
-
-                if (data.key) {
-                    currentKey = data.key;
-                    document.getElementById('result').innerText = data.key;
-                    resultBox.classList.add('show');
-                    showStatusMessage(statusMessage, '✅ Key generated successfully!', 'success');
-                    document.getElementById('copyBtn').disabled = false;
-                } else {
-                    throw new Error('No key received from server');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showStatusMessage(statusMessage, `❌ Failed to generate key: ${error.message}`, 'error');
-                document.getElementById('copyBtn').disabled = true;
-            } finally {
-                generateBtn.disabled = false;
-            }
+            generateKeyLogic('user', days, 'userResultBox', 'userResultText', 'userStatus');
         }
 
-        function copyToClipboard() {
-            if (!currentKey) return;
+        function adminGenerateKey() {
+            const days = parseInt(document.getElementById('adminDaysInput').value) || 2;
+            if (days < 1 || days > 365) {
+                showStatus(document.getElementById('adminStatus'), '❌ Enter days between 1-365', 'error');
+                return;
+            }
 
-            navigator.clipboard.writeText(currentKey).then(() => {
-                const copyIndicator = document.getElementById('copyIndicator');
-                copyIndicator.classList.add('show');
+            generateKeyLogic('admin', days, null, null, 'adminStatus');
+            setTimeout(() => refreshKeysList(), 500);
+        }
+
+        function generateKeyLogic(role, days, resultBoxId, resultTextId, statusId) {
+            const statusEl = document.getElementById(statusId);
+            const btn = role === 'user' ? document.getElementById('userGenerateBtn') : document.getElementById('adminGenerateBtn');
+
+            btn.disabled = true;
+            showStatus(statusEl, '<span class="spinner"></span>Generating key...', 'loading');
+
+            setTimeout(() => {
+                try {
+                    const key = generateRandomKey();
+                    const expiryDate = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+                    const createdDate = new Date();
+
+                    const keyData = {
+                        id: Date.now(),
+                        key: key,
+                        user: getSession().user,
+                        role: role,
+                        createdAt: createdDate.toISOString(),
+                        expiresAt: expiryDate.toISOString(),
+                        status: 'active'
+                    };
+
+                    const db = getDB();
+                    db.keys.push(keyData);
+                    saveDB(db);
+
+                    if (resultBoxId) {
+                        currentUserKey = keyData;
+                        document.getElementById(resultBoxId).classList.add('show');
+                        document.getElementById(resultTextId).textContent = key;
+                        updateExpiryDisplay();
+                    }
+
+                    showStatus(statusEl, '✅ Key generated successfully!', 'success');
+                } catch (error) {
+                    showStatus(statusEl, `❌ Error: ${error.message}`, 'error');
+                } finally {
+                    btn.disabled = false;
+                }
+            }, 500);
+        }
+
+        function generateRandomKey() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let key = '';
+            for (let i = 0; i < 32; i++) {
+                key += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return key;
+        }
+
+        function updateExpiryDisplay() {
+            if (!currentUserKey) return;
+
+            const expiresAt = new Date(currentUserKey.expiresAt);
+            const now = new Date();
+            const timeLeft = expiresAt - now;
+            const daysLeft = Math.floor(timeLeft / (24 * 60 * 60 * 1000));
+            const hoursLeft = Math.floor((timeLeft % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+
+            const percent = Math.max(0, Math.min(100, (timeLeft / (currentUserKey.daysValidity * 24 * 60 * 60 * 1000)) * 100));
+            document.getElementById('userProgressFill').style.width = percent + '%';
+
+            const expiryText = timeLeft > 0
+                ? `Expires in ${daysLeft}d ${hoursLeft}h`
+                : 'Key Expired';
+
+            document.getElementById('userExpiryInfo').textContent = '⏱️ ' + expiryText;
+        }
+
+        function userCopyKey() {
+            if (!currentUserKey) return;
+            navigator.clipboard.writeText(currentUserKey.key).then(() => {
+                document.getElementById('userCopyIndicator').classList.add('show');
                 setTimeout(() => {
-                    copyIndicator.classList.remove('show');
+                    document.getElementById('userCopyIndicator').classList.remove('show');
                 }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy:', err);
-                showStatusMessage(document.getElementById('statusMessage'), '❌ Failed to copy to clipboard', 'error');
             });
         }
 
-        function showStatusMessage(element, message, type) {
+        // ==================== ADMIN MANAGEMENT ====================
+        function refreshKeysList() {
+            const db = getDB();
+            const keysHtml = db.keys
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map(keyData => {
+                    const expiresAt = new Date(keyData.expiresAt);
+                    const now = new Date();
+                    const timeLeft = expiresAt - now;
+                    const isExpired = timeLeft <= 0;
+                    const daysLeft = Math.floor(Math.abs(timeLeft) / (24 * 60 * 60 * 1000));
+
+                    let statusClass = 'status-active';
+                    let statusText = 'Active';
+
+                    if (keyData.status === 'revoked') {
+                        statusClass = 'status-revoked';
+                        statusText = 'Revoked';
+                    } else if (isExpired) {
+                        statusClass = 'status-expired';
+                        statusText = 'Expired';
+                    } else if (daysLeft <= 2) {
+                        statusClass = 'status-expired';
+                        statusText = 'Expiring Soon';
+                    }
+
+                    return `
+                        <div class="key-item">
+                            <div class="key-header">
+                                <div class="key-user">👤 ${keyData.user}</div>
+                                <div class="key-status ${statusClass}">${statusText}</div>
+                            </div>
+                            <div class="key-value">${keyData.key}</div>
+                            <div class="key-info">
+                                <div>📅 Created: ${new Date(keyData.createdAt).toLocaleString()}</div>
+                                <div>⏰ Expires: ${expiresAt.toLocaleString()}</div>
+                                <div>${isExpired ? `⚠️ Expired ${daysLeft} days ago` : `⏱️ ${daysLeft} days left`}</div>
+                            </div>
+                            <div class="key-actions">
+                                ${keyData.status === 'active' && !isExpired ? `
+                                    <button class="btn-secondary btn-small" onclick="revokeKey(${keyData.id})">🚫 Revoke</button>
+                                    <button class="btn-secondary btn-small" onclick="extendExpiry(${keyData.id})">⏳ Extend</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            document.getElementById('keysList').innerHTML = keysHtml || '<p style="color: #999; text-align: center;">No keys generated yet</p>';
+        }
+
+        function revokeKey(keyId) {
+            if (!confirm('Are you sure you want to revoke this key?')) return;
+
+            const db = getDB();
+            const key = db.keys.find(k => k.id === keyId);
+            if (key) {
+                key.status = 'revoked';
+                saveDB(db);
+                refreshKeysList();
+                showStatus(document.getElementById('adminStatus'), '✅ Key revoked successfully', 'success');
+            }
+        }
+
+        function extendExpiry(keyId) {
+            const days = prompt('Extend expiry by how many days?', '7');
+            if (!days || isNaN(days) || days < 1) return;
+
+            const db = getDB();
+            const key = db.keys.find(k => k.id === keyId);
+            if (key) {
+                const newExpiry = new Date(new Date(key.expiresAt).getTime() + parseInt(days) * 24 * 60 * 60 * 1000);
+                key.expiresAt = newExpiry.toISOString();
+                saveDB(db);
+                refreshKeysList();
+                showStatus(document.getElementById('adminStatus'), `✅ Key expiry extended by ${days} days`, 'success');
+            }
+        }
+
+        function changeAdminUsername() {
+            const newUsername = document.getElementById('newAdminUsername').value.trim();
+            const statusEl = document.getElementById('usernameStatus');
+
+            if (!newUsername) {
+                showStatus(statusEl, '❌ Please enter a new username', 'error');
+                return;
+            }
+
+            const creds = getAdminCreds();
+            creds.username = newUsername;
+            saveAdminCreds(creds);
+
+            const session = getSession();
+            session.user = newUsername;
+            setSession(newUsername, 'admin');
+
+            showStatus(statusEl, '✅ Admin username changed successfully!', 'success');
+            document.getElementById('newAdminUsername').value = '';
+            document.getElementById('adminName').textContent = newUsername;
+        }
+
+        function changeAdminPassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newAdminPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const statusEl = document.getElementById('passwordStatus');
+
+            if (!current || !newPass || !confirm) {
+                showStatus(statusEl, '❌ Please fill all fields', 'error');
+                return;
+            }
+
+            const creds = getAdminCreds();
+
+            if (current !== creds.password) {
+                showStatus(statusEl, '❌ Current password is incorrect', 'error');
+                return;
+            }
+
+            if (newPass !== confirm) {
+                showStatus(statusEl, '❌ New passwords do not match', 'error');
+                return;
+            }
+
+            creds.password = newPass;
+            saveAdminCreds(creds);
+
+            showStatus(statusEl, '✅ Admin password changed successfully!', 'success');
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newAdminPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        // ==================== UTILITIES ====================
+        function showStatus(element, message, type) {
             element.innerHTML = message;
             element.className = `status-message show status-${type}`;
 
@@ -603,13 +1075,20 @@
             }
         }
 
-        // Allow Enter key to login or generate
+        // Update expiry display every minute for user
+        setInterval(() => {
+            if (getSession()?.role === 'user') {
+                updateExpiryDisplay();
+            }
+        }, 60000);
+
+        // Allow Enter key for login
         document.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                if (document.getElementById('authSection').style.display !== 'none') {
-                    login();
-                } else {
-                    getKey();
+                if (document.getElementById('loginSection').style.display !== 'none') {
+                    const activeTab = document.querySelector('.tab-content.active');
+                    if (activeTab.id === 'userLogin') userLogin();
+                    else adminLogin();
                 }
             }
         });
