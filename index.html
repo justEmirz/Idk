@@ -58,8 +58,47 @@
             font-size: 14px;
         }
 
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            color: #999;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: #666;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         label {
@@ -70,7 +109,10 @@
             font-size: 14px;
         }
 
-        input[type="number"] {
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        input[type="email"] {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
@@ -80,15 +122,38 @@
             font-family: inherit;
         }
 
-        input[type="number"]:focus {
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle input {
+            padding-right: 40px;
+        }
+
+        .toggle-eye {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 18px;
+            user-select: none;
+        }
+
         .button-group {
             display: flex;
             gap: 10px;
+            margin-top: 25px;
         }
 
         button {
@@ -103,40 +168,51 @@
             font-family: inherit;
         }
 
-        .btn-generate {
+        .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        .btn-generate:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-generate:active {
+        .btn-primary:active {
             transform: translateY(0);
         }
 
-        .btn-generate:disabled {
+        .btn-primary:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
-        .btn-copy {
+        .btn-secondary {
             background: #f0f0f0;
             color: #333;
             border: 2px solid #e0e0e0;
         }
 
-        .btn-copy:hover {
+        .btn-secondary:hover {
             background: #e0e0e0;
             border-color: #d0d0d0;
         }
 
-        .btn-copy:disabled {
+        .btn-secondary:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
         }
 
         .result-section {
@@ -242,12 +318,63 @@
             to { transform: rotate(360deg); }
         }
 
-        .error-details {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #fcc;
+        .user-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .user-info p {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .user-info strong {
+            color: #333;
+        }
+
+        .requirements {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .requirements h4 {
+            color: #333;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .requirement-item {
+            color: #666;
             font-size: 12px;
-            color: #999;
+            margin: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .requirement-check {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .requirement-check.met {
+            color: #22c55e;
+        }
+
+        .requirement-check.unmet {
+            color: #e11d48;
         }
 
         @media (max-width: 600px) {
@@ -274,53 +401,336 @@
     <div class="container">
         <div class="header">
             <h1>🔑 Key Generator</h1>
-            <p>Generate secure keys for your applications</p>
+            <p>Secure Key Generation Platform</p>
         </div>
 
-        <div class="form-group">
-            <label for="daysInput">Validity Period (days)</label>
-            <input 
-                type="number" 
-                id="daysInput" 
-                value="2" 
-                min="1" 
-                max="365"
-                placeholder="Enter number of days"
-            >
+        <!-- Auth Section -->
+        <div id="authSection">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" onclick="switchTab('register')">Register</button>
+            </div>
+
+            <!-- Login Tab -->
+            <div id="login" class="tab-content active">
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input 
+                        type="text" 
+                        id="loginUsername" 
+                        placeholder="Enter your username"
+                    >
+                </div>
+
+                <div class="form-group password-toggle">
+                    <label for="loginPassword">Password</label>
+                    <input 
+                        type="password" 
+                        id="loginPassword" 
+                        placeholder="Enter your password"
+                    >
+                    <span class="toggle-eye" onclick="togglePassword('loginPassword')">👁️</span>
+                </div>
+
+                <button class="btn-primary" onclick="login()" style="width: 100%; margin-top: 20px;">
+                    Login
+                </button>
+
+                <div class="status-message" id="loginStatus"></div>
+            </div>
+
+            <!-- Register Tab -->
+            <div id="register" class="tab-content">
+                <div class="form-group">
+                    <label for="regUsername">Username</label>
+                    <input 
+                        type="text" 
+                        id="regUsername" 
+                        placeholder="Choose a username"
+                        oninput="validateUsername()"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input 
+                        type="email" 
+                        id="regEmail" 
+                        placeholder="Enter your email"
+                    >
+                </div>
+
+                <div class="form-group password-toggle">
+                    <label for="regPassword">Password</label>
+                    <input 
+                        type="password" 
+                        id="regPassword" 
+                        placeholder="Create a strong password"
+                        oninput="validatePassword()"
+                    >
+                    <span class="toggle-eye" onclick="togglePassword('regPassword')">👁️</span>
+                </div>
+
+                <div class="form-group password-toggle">
+                    <label for="regConfirm">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="regConfirm" 
+                        placeholder="Confirm your password"
+                        oninput="validatePassword()"
+                    >
+                    <span class="toggle-eye" onclick="togglePassword('regConfirm')">👁️</span>
+                </div>
+
+                <div class="requirements">
+                    <h4>Password Requirements:</h4>
+                    <div class="requirement-item">
+                        <span class="requirement-check unmet" id="check-length">✗</span>
+                        <span>At least 8 characters</span>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-check unmet" id="check-upper">✗</span>
+                        <span>One uppercase letter</span>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-check unmet" id="check-lower">✗</span>
+                        <span>One lowercase letter</span>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-check unmet" id="check-number">✗</span>
+                        <span>One number</span>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-check unmet" id="check-special">✗</span>
+                        <span>One special character (!@#$%^&*)</span>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-check unmet" id="check-match">✗</span>
+                        <span>Passwords match</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="register()" style="width: 100%; margin-top: 20px;">
+                    Create Account
+                </button>
+
+                <div class="status-message" id="registerStatus"></div>
+            </div>
         </div>
 
-        <div class="button-group">
-            <button class="btn-generate" id="generateBtn" onclick="getKey()">
-                Generate Key
-            </button>
-            <button class="btn-copy" id="copyBtn" onclick="copyToClipboard()" disabled>
-                📋 Copy
-            </button>
-        </div>
+        <!-- App Section (Hidden until logged in) -->
+        <div id="appSection" style="display: none;">
+            <div class="user-info">
+                <p>Welcome, <strong id="currentUsername"></strong>! 👋</p>
+                <p style="font-size: 12px; margin-top: 8px;" id="userEmail"></p>
+            </div>
 
-        <div class="status-message" id="statusMessage"></div>
+            <div class="form-group">
+                <label for="daysInput">Validity Period (days)</label>
+                <input 
+                    type="number" 
+                    id="daysInput" 
+                    value="2" 
+                    min="1" 
+                    max="365"
+                    placeholder="Enter number of days"
+                >
+            </div>
 
-        <div class="result-section">
-            <div class="result-box" id="resultBox">
-                <div class="result-label">Generated Key</div>
-                <div class="result-content">
-                    <div class="result-text" id="result"></div>
-                    <div class="copy-indicator" id="copyIndicator">Copied!</div>
+            <div class="button-group">
+                <button class="btn-primary" id="generateBtn" onclick="getKey()">
+                    Generate Key
+                </button>
+                <button class="btn-secondary" id="copyBtn" onclick="copyToClipboard()" disabled>
+                    📋 Copy
+                </button>
+            </div>
+
+            <div class="status-message" id="statusMessage"></div>
+
+            <div class="result-section">
+                <div class="result-box" id="resultBox">
+                    <div class="result-label">Generated Key</div>
+                    <div class="result-content">
+                        <div class="result-text" id="result"></div>
+                        <div class="copy-indicator" id="copyIndicator">Copied!</div>
+                    </div>
                 </div>
             </div>
+
+            <button class="btn-logout" onclick="logout()" style="width: 100%;">
+                🚪 Logout
+            </button>
         </div>
     </div>
 
     <script>
         let currentKey = '';
+        let currentUser = null;
+        const users = JSON.parse(localStorage.getItem('users')) || {};
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        // Check if user is already logged in
+        if (loggedInUser) {
+            currentUser = JSON.parse(loggedInUser);
+            showAppSection();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+            
+            // Clear status messages
+            document.getElementById('loginStatus').innerHTML = '';
+            document.getElementById('registerStatus').innerHTML = '';
+        }
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const eye = event.target;
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                eye.textContent = '👁️‍🗨️';
+            } else {
+                field.type = 'password';
+                eye.textContent = '👁️';
+            }
+        }
+
+        function validateUsername() {
+            const username = document.getElementById('regUsername').value;
+            const isValid = username.length >= 3 && /^[a-zA-Z0-9_]+$/.test(username);
+            return isValid;
+        }
+
+        function validatePassword() {
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirm').value;
+
+            const checks = {
+                length: password.length >= 8,
+                upper: /[A-Z]/.test(password),
+                lower: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+                match: password === confirm && password.length > 0
+            };
+
+            Object.entries(checks).forEach(([key, value]) => {
+                const elem = document.getElementById(`check-${key}`);
+                if (value) {
+                    elem.classList.remove('unmet');
+                    elem.classList.add('met');
+                    elem.textContent = '✓';
+                } else {
+                    elem.classList.remove('met');
+                    elem.classList.add('unmet');
+                    elem.textContent = '✗';
+                }
+            });
+
+            return Object.values(checks).every(v => v);
+        }
+
+        function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirm').value;
+            const statusEl = document.getElementById('registerStatus');
+
+            // Validation
+            if (!username || !email || !password || !confirm) {
+                showStatusMessage(statusEl, 'Please fill all fields', 'error');
+                return;
+            }
+
+            if (!validateUsername()) {
+                showStatusMessage(statusEl, 'Username must be 3+ characters, alphanumeric and underscores only', 'error');
+                return;
+            }
+
+            if (!validatePassword()) {
+                showStatusMessage(statusEl, 'Password does not meet requirements', 'error');
+                return;
+            }
+
+            if (users[username]) {
+                showStatusMessage(statusEl, 'Username already exists', 'error');
+                return;
+            }
+
+            // Hash password (simple hash for demo - use bcrypt in production!)
+            const hashedPassword = btoa(password);
+
+            // Save user
+            users[username] = {
+                email: email,
+                password: hashedPassword,
+                created: new Date().toISOString()
+            };
+            localStorage.setItem('users', JSON.stringify(users));
+
+            showStatusMessage(statusEl, 'Account created successfully! Please login.', 'success');
+            setTimeout(() => {
+                document.querySelector('[onclick="switchTab(\'login\')"]').click();
+            }, 1500);
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const statusEl = document.getElementById('loginStatus');
+
+            if (!username || !password) {
+                showStatusMessage(statusEl, 'Please enter username and password', 'error');
+                return;
+            }
+
+            const user = users[username];
+            if (!user || user.password !== btoa(password)) {
+                showStatusMessage(statusEl, 'Invalid username or password', 'error');
+                return;
+            }
+
+            // Login successful
+            currentUser = { username, email: user.email };
+            localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+            showStatusMessage(statusEl, 'Login successful!', 'success');
+            
+            setTimeout(() => {
+                showAppSection();
+            }, 1000);
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            currentUser = null;
+            currentKey = '';
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('appSection').style.display = 'none';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('statusMessage').innerHTML = '';
+        }
+
+        function showAppSection() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('appSection').style.display = 'block';
+            document.getElementById('currentUsername').textContent = currentUser.username;
+            document.getElementById('userEmail').textContent = currentUser.email;
+        }
 
         async function getKey() {
             const daysInput = document.getElementById('daysInput');
             const days = parseInt(daysInput.value) || 2;
             
-            // Validate input
             if (days < 1 || days > 365) {
-                showStatus('Please enter a value between 1 and 365 days', 'error');
+                showStatusMessage(document.getElementById('statusMessage'), 'Please enter a value between 1 and 365 days', 'error');
                 return;
             }
 
@@ -328,9 +738,8 @@
             const resultBox = document.getElementById('resultBox');
             const statusMessage = document.getElementById('statusMessage');
 
-            // Disable button and show loading
             generateBtn.disabled = true;
-            showStatus(`<span class="spinner"></span>Generating key...`, 'loading');
+            showStatusMessage(statusMessage, `<span class="spinner"></span>Generating key...`, 'loading');
             resultBox.classList.remove('show');
 
             try {
@@ -350,17 +759,14 @@
                     currentKey = data.key;
                     document.getElementById('result').innerText = data.key;
                     resultBox.classList.add('show');
-                    showStatus('Key generated successfully!', 'success');
+                    showStatusMessage(statusMessage, 'Key generated successfully!', 'success');
                     document.getElementById('copyBtn').disabled = false;
                 } else {
                     throw new Error('No key received from server');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showStatus(
-                    `Failed to generate key: ${error.message}`,
-                    'error'
-                );
+                showStatusMessage(statusMessage, `Failed to generate key: ${error.message}`, 'error');
                 document.getElementById('copyBtn').disabled = true;
             } finally {
                 generateBtn.disabled = false;
@@ -378,26 +784,33 @@
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy:', err);
-                showStatus('Failed to copy to clipboard', 'error');
+                showStatusMessage(document.getElementById('statusMessage'), 'Failed to copy to clipboard', 'error');
             });
         }
 
-        function showStatus(message, type) {
-            const statusMessage = document.getElementById('statusMessage');
-            statusMessage.innerHTML = message;
-            statusMessage.className = `status-message show status-${type}`;
+        function showStatusMessage(element, message, type) {
+            element.innerHTML = message;
+            element.className = `status-message show status-${type}`;
 
             if (type !== 'loading') {
                 setTimeout(() => {
-                    statusMessage.classList.remove('show');
+                    element.classList.remove('show');
                 }, 4000);
             }
         }
 
-        // Allow Enter key to generate
-        document.getElementById('daysInput').addEventListener('keypress', function(event) {
+        // Allow Enter key
+        document.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                getKey();
+                if (document.getElementById('authSection').style.display !== 'none') {
+                    if (document.getElementById('login').classList.contains('active')) {
+                        login();
+                    } else if (document.getElementById('register').classList.contains('active')) {
+                        register();
+                    }
+                } else {
+                    getKey();
+                }
             }
         });
     </script>
