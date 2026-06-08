@@ -1,19 +1,405 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-copy {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-copy:hover {
+            background: #e0e0e0;
+            border-color: #d0d0d0;
+        }
+
+        .btn-copy:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            margin-top: 30px;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 80px;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .result-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-text {
+            flex: 1;
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+        }
+
+        .copy-indicator {
+            color: #22c55e;
+            font-size: 12px;
+            font-weight: 600;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .copy-indicator.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-error {
+            background: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+
+        .status-success {
+            background: #efe;
+            color: #3c3;
+            border: 1px solid #cfc;
+        }
+
+        .status-loading {
+            background: #eef;
+            color: #33c;
+            border: 1px solid #ccf;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(51, 51, 204, 0.2);
+            border-top-color: #33c;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-details {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #fcc;
+            font-size: 12px;
+            color: #999;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            button {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
 <body>
-    <button onclick="getKey()">Generate Key</button>
-    <p id="result"></p>
+    <div class="container">
+        <div class="header">
+            <h1>🔑 Key Generator</h1>
+            <p>Generate secure keys for your applications</p>
+        </div>
+
+        <div class="form-group">
+            <label for="daysInput">Validity Period (days)</label>
+            <input 
+                type="number" 
+                id="daysInput" 
+                value="2" 
+                min="1" 
+                max="365"
+                placeholder="Enter number of days"
+            >
+        </div>
+
+        <div class="button-group">
+            <button class="btn-generate" id="generateBtn" onclick="getKey()">
+                Generate Key
+            </button>
+            <button class="btn-copy" id="copyBtn" onclick="copyToClipboard()" disabled>
+                📋 Copy
+            </button>
+        </div>
+
+        <div class="status-message" id="statusMessage"></div>
+
+        <div class="result-section">
+            <div class="result-box" id="resultBox">
+                <div class="result-label">Generated Key</div>
+                <div class="result-content">
+                    <div class="result-text" id="result"></div>
+                    <div class="copy-indicator" id="copyIndicator">Copied!</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
+        let currentKey = '';
+
         async function getKey() {
-            const res = await fetch('https://s3-hacks-get-key-production.up.railway.app/generate_key.php', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({days: 2})
-            });
-            const data = await res.json();
-            document.getElementById('result').innerText = "Key: " + data.key;
+            const daysInput = document.getElementById('daysInput');
+            const days = parseInt(daysInput.value) || 2;
+            
+            // Validate input
+            if (days < 1 || days > 365) {
+                showStatus('Please enter a value between 1 and 365 days', 'error');
+                return;
+            }
+
+            const generateBtn = document.getElementById('generateBtn');
+            const resultBox = document.getElementById('resultBox');
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Disable button and show loading
+            generateBtn.disabled = true;
+            showStatus(`<span class="spinner"></span>Generating key...`, 'loading');
+            resultBox.classList.remove('show');
+
+            try {
+                const res = await fetch('https://s3-hacks-get-key-production.up.railway.app/generate_key.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ days: days })
+                });
+
+                if (!res.ok) {
+                    throw new Error(`Server returned ${res.status}`);
+                }
+
+                const data = await res.json();
+
+                if (data.key) {
+                    currentKey = data.key;
+                    document.getElementById('result').innerText = data.key;
+                    resultBox.classList.add('show');
+                    showStatus('Key generated successfully!', 'success');
+                    document.getElementById('copyBtn').disabled = false;
+                } else {
+                    throw new Error('No key received from server');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus(
+                    `Failed to generate key: ${error.message}`,
+                    'error'
+                );
+                document.getElementById('copyBtn').disabled = true;
+            } finally {
+                generateBtn.disabled = false;
+            }
         }
+
+        function copyToClipboard() {
+            if (!currentKey) return;
+
+            navigator.clipboard.writeText(currentKey).then(() => {
+                const copyIndicator = document.getElementById('copyIndicator');
+                copyIndicator.classList.add('show');
+                setTimeout(() => {
+                    copyIndicator.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                showStatus('Failed to copy to clipboard', 'error');
+            });
+        }
+
+        function showStatus(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.innerHTML = message;
+            statusMessage.className = `status-message show status-${type}`;
+
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    statusMessage.classList.remove('show');
+                }, 4000);
+            }
+        }
+
+        // Allow Enter key to generate
+        document.getElementById('daysInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                getKey();
+            }
+        });
     </script>
 </body>
 </html>
