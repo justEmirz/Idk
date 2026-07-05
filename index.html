@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Key Generator - Secure System</title>
+    <title>Key Generator - Roblox Script Verification</title>
     <style>
         * {
             margin: 0;
@@ -171,14 +171,7 @@
             user-select: none;
         }
 
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
         button {
-            flex: 1;
             padding: 14px 20px;
             border: none;
             border-radius: 10px;
@@ -192,6 +185,7 @@
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            width: 100%;
         }
 
         .btn-primary:hover {
@@ -209,25 +203,17 @@
             background: #f0f0f0;
             color: #333;
             border: 2px solid #e0e0e0;
+            width: 100%;
         }
 
         .btn-secondary:hover {
             background: #e0e0e0;
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
-        }
-
         .btn-success {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: white;
+            width: 100%;
         }
 
         .btn-success:hover {
@@ -235,11 +221,22 @@
             box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
         }
 
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+        }
+
         .btn-small {
-            flex: unset;
             padding: 8px 12px;
             font-size: 12px;
-            margin: 0 5px 0 0;
+            width: auto;
+            margin-right: 5px;
         }
 
         .status-message {
@@ -313,11 +310,6 @@
             font-weight: 600;
         }
 
-        .info .badge {
-            display: inline-block;
-            margin-top: 8px;
-        }
-
         .result-box {
             background: #f8f9fa;
             border-left: 4px solid #667eea;
@@ -371,27 +363,6 @@
             opacity: 1;
         }
 
-        .expiry-info {
-            font-size: 12px;
-            color: #666;
-            margin-top: 10px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.3s ease;
-        }
-
         .key-item {
             background: #f8f9fa;
             border: 1px solid #e0e0e0;
@@ -405,6 +376,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .key-user {
@@ -438,7 +411,6 @@
             font-size: 11px;
             font-weight: 600;
             color: white;
-            margin-left: 8px;
         }
 
         .key-type-free {
@@ -470,6 +442,7 @@
             display: flex;
             gap: 10px;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .security-warning {
@@ -480,20 +453,6 @@
             border-radius: 8px;
             margin-bottom: 20px;
             font-size: 12px;
-        }
-
-        .verification-section {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border: 2px solid #667eea;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-
-        .verification-section h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 16px;
         }
 
         .key-type-selector {
@@ -522,11 +481,6 @@
             background: rgba(102, 126, 234, 0.1);
         }
 
-        .type-option.selected.premium {
-            border-color: #f59e0b;
-            background: rgba(245, 158, 11, 0.1);
-        }
-
         .type-icon {
             font-size: 24px;
             margin-bottom: 8px;
@@ -536,17 +490,6 @@
             font-weight: 600;
             color: #333;
             margin-bottom: 4px;
-        }
-
-        .type-desc {
-            font-size: 11px;
-            color: #666;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
         }
 
         .verification-result {
@@ -587,18 +530,13 @@
                 padding: 20px;
             }
 
-            .grid-2 {
+            .key-type-selector {
                 grid-template-columns: 1fr;
             }
 
             .key-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 8px;
-            }
-
-            .key-type-selector {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -607,19 +545,19 @@
     <div class="container">
         <div class="header">
             <h1>🔑 Key Generator</h1>
-            <p>Secure Key Management System - Roblox Script Verification</p>
+            <p>Roblox Script Verification System</p>
         </div>
 
         <!-- Login Section -->
         <div id="loginSection">
             <div class="security-warning">
-                ⚠️ <strong>Security Notice:</strong> This is a frontend-only application. For production use, implement a backend server with proper authentication.
+                ⚠️ <strong>Security Notice:</strong> Make sure backend server is running with: <code style="background: #f0f0f0; padding: 2px 6px;">node server.js</code>
             </div>
 
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchLoginTab('userLogin')">User Login</button>
-                <button class="tab-btn" onclick="switchLoginTab('adminLogin')">Admin Login</button>
-                <button class="tab-btn" onclick="switchLoginTab('verifyTab')">Verify Key</button>
+                <button class="tab-btn active" onclick="switchLoginTab(event, 'userLogin')">User Login</button>
+                <button class="tab-btn" onclick="switchLoginTab(event, 'adminLogin')">Admin Login</button>
+                <button class="tab-btn" onclick="switchLoginTab(event, 'verifyTab')">Verify Key</button>
             </div>
 
             <!-- User Login -->
@@ -635,10 +573,7 @@
                     <span class="toggle-eye" onclick="togglePassword('userPassword')">👁️</span>
                 </div>
 
-                <button class="btn-primary" onclick="userLogin()" style="width: 100%;">
-                    Login as User
-                </button>
-
+                <button class="btn-primary" onclick="userLogin()">Login as User</button>
                 <div class="status-message" id="userLoginStatus"></div>
 
                 <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0; font-size: 12px; color: #666;">
@@ -661,10 +596,7 @@
                     <span class="toggle-eye" onclick="togglePassword('adminPassword')">👁️</span>
                 </div>
 
-                <button class="btn-primary" onclick="adminLogin()" style="width: 100%;">
-                    Login as Admin
-                </button>
-
+                <button class="btn-primary" onclick="adminLogin()">Login as Admin</button>
                 <div class="status-message" id="adminLoginStatus"></div>
 
                 <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0; font-size: 12px; color: #666;">
@@ -678,13 +610,10 @@
             <div id="verifyTab" class="tab-content">
                 <div class="form-group">
                     <label for="verifyKeyInput">Enter Your Key</label>
-                    <input type="text" id="verifyKeyInput" placeholder="Paste your key here">
+                    <input type="text" id="verifyKeyInput" placeholder="Paste your key here (e.g., FreeAbcd1234... or PremXyZ9876...)">
                 </div>
 
-                <button class="btn-success" onclick="verifyKey()" style="width: 100%;">
-                    ✓ Verify Key
-                </button>
-
+                <button class="btn-success" onclick="verifyKey()">✓ Verify Key</button>
                 <div class="status-message" id="verifyStatus"></div>
 
                 <div class="verification-result" id="verifyResult">
@@ -695,72 +624,56 @@
 
         <!-- User Dashboard -->
         <div id="userDashboard" style="display: none;">
-            <div class="user-info info">
+            <div class="user-info">
                 <p>👤 Welcome, <strong id="userName"></strong>!</p>
                 <div class="badge badge-user">USER</div>
             </div>
 
-            <div class="verification-section">
-                <h3>🎮 Generate Roblox Key</h3>
-                
-                <div class="form-group">
-                    <label for="userDaysInput">Validity Period (days)</label>
-                    <input type="number" id="userDaysInput" value="2" min="1" max="365">
+            <div class="form-group">
+                <label for="userDaysInput">Validity Period (days)</label>
+                <input type="number" id="userDaysInput" value="2" min="1" max="365">
+            </div>
+
+            <label style="margin-bottom: 15px; display: block;">Key Type</label>
+            <div class="key-type-selector">
+                <div class="type-option selected" onclick="selectKeyType(event, 'free')">
+                    <div class="type-icon">🆓</div>
+                    <div class="type-name">FREE</div>
                 </div>
-
-                <label style="margin-bottom: 15px;">Key Type</label>
-                <div class="key-type-selector">
-                    <div class="type-option selected" onclick="selectKeyType('free')">
-                        <div class="type-icon">🆓</div>
-                        <div class="type-name">FREE</div>
-                        <div class="type-desc">Free(random)</div>
-                    </div>
-                    <div class="type-option" onclick="selectKeyType('premium')">
-                        <div class="type-icon">👑</div>
-                        <div class="type-name">PREMIUM</div>
-                        <div class="type-desc">Prem(random)</div>
-                    </div>
-                </div>
-
-                <input type="hidden" id="selectedKeyType" value="free">
-
-                <button class="btn-primary" id="userGenerateBtn" onclick="userGenerateKey()" style="width: 100%;">
-                    Generate Key
-                </button>
-
-                <div class="status-message" id="userStatus"></div>
-
-                <div class="result-box" id="userResultBox">
-                    <div class="result-label">Generated Key</div>
-                    <div class="result-content">
-                        <div class="result-text" id="userResultText"></div>
-                        <div class="copy-indicator" id="userCopyIndicator">Copied!</div>
-                    </div>
-                    <div class="expiry-info" id="userExpiryInfo"></div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="userProgressFill" style="width: 100%;"></div>
-                    </div>
-                    <button class="btn-secondary btn-small" onclick="userCopyKey()" style="margin-top: 10px; width: 100%;">
-                        📋 Copy Key
-                    </button>
+                <div class="type-option" onclick="selectKeyType(event, 'premium')">
+                    <div class="type-icon">👑</div>
+                    <div class="type-name">PREMIUM</div>
                 </div>
             </div>
 
-            <button class="btn-danger" onclick="logout()" style="width: 100%; margin-top: 20px;">
-                🚪 Logout
-            </button>
+            <input type="hidden" id="selectedKeyType" value="free">
+
+            <button class="btn-primary" id="userGenerateBtn" onclick="userGenerateKey()">Generate Key</button>
+            <div class="status-message" id="userStatus"></div>
+
+            <div class="result-box" id="userResultBox">
+                <div class="result-label">Generated Key</div>
+                <div class="result-content">
+                    <div class="result-text" id="userResultText"></div>
+                    <div class="copy-indicator" id="userCopyIndicator">Copied!</div>
+                </div>
+                <div id="userExpiryInfo" style="font-size: 12px; color: #666; margin-top: 10px;"></div>
+                <button class="btn-secondary btn-small" onclick="userCopyKey()" style="margin-top: 10px;">📋 Copy Key</button>
+            </div>
+
+            <button class="btn-danger" onclick="logout()" style="margin-top: 20px;">🚪 Logout</button>
         </div>
 
         <!-- Admin Dashboard -->
         <div id="adminDashboard" style="display: none;">
-            <div class="admin-info info">
+            <div class="admin-info">
                 <p>🔒 Admin Panel - <strong id="adminName"></strong></p>
                 <div class="badge badge-admin">ADMINISTRATOR</div>
             </div>
 
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchAdminTab('keysTab')">Key Management</button>
-                <button class="tab-btn" onclick="switchAdminTab('settingsTab')">Settings</button>
+                <button class="tab-btn active" onclick="switchAdminTab(event, 'keysTab')">Key Management</button>
+                <button class="tab-btn" onclick="switchAdminTab(event, 'settingsTab')">Settings</button>
             </div>
 
             <!-- Keys Tab -->
@@ -770,26 +683,21 @@
                     <input type="number" id="adminDaysInput" value="2" min="1" max="365">
                 </div>
 
-                <label style="margin-bottom: 15px;">Key Type</label>
+                <label style="margin-bottom: 15px; display: block;">Key Type</label>
                 <div class="key-type-selector">
-                    <div class="type-option selected" onclick="selectAdminKeyType('free')">
+                    <div class="type-option selected" onclick="selectAdminKeyType(event, 'free')">
                         <div class="type-icon">🆓</div>
                         <div class="type-name">FREE</div>
-                        <div class="type-desc">Free(random)</div>
                     </div>
-                    <div class="type-option" onclick="selectAdminKeyType('premium')">
+                    <div class="type-option" onclick="selectAdminKeyType(event, 'premium')">
                         <div class="type-icon">👑</div>
                         <div class="type-name">PREMIUM</div>
-                        <div class="type-desc">Prem(random)</div>
                     </div>
                 </div>
 
                 <input type="hidden" id="selectedAdminKeyType" value="free">
 
-                <button class="btn-primary" id="adminGenerateBtn" onclick="adminGenerateKey()" style="width: 100%;">
-                    Generate Test Key
-                </button>
-
+                <button class="btn-primary" id="adminGenerateBtn" onclick="adminGenerateKey()">Generate Test Key</button>
                 <div class="status-message" id="adminStatus"></div>
 
                 <h3 style="margin-top: 30px; margin-bottom: 15px; color: #333;">📋 All Generated Keys</h3>
@@ -805,9 +713,7 @@
                     <label for="newAdminUsername">New Username</label>
                     <input type="text" id="newAdminUsername" placeholder="Enter new admin username">
                 </div>
-                <button class="btn-primary" onclick="changeAdminUsername()" style="width: 100%;">
-                    Update Username
-                </button>
+                <button class="btn-primary" onclick="changeAdminUsername()">Update Username</button>
                 <div class="status-message" id="usernameStatus"></div>
 
                 <h4 style="margin-top: 30px; margin-bottom: 15px; color: #333;">Change Admin Password</h4>
@@ -829,38 +735,28 @@
                     <span class="toggle-eye" onclick="togglePassword('confirmPassword')">👁️</span>
                 </div>
 
-                <button class="btn-primary" onclick="changeAdminPassword()" style="width: 100%;">
-                    Update Password
-                </button>
+                <button class="btn-primary" onclick="changeAdminPassword()">Update Password</button>
                 <div class="status-message" id="passwordStatus"></div>
 
                 <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
 
-                <button class="btn-danger" onclick="logout()" style="width: 100%;">
-                    🚪 Logout
-                </button>
+                <button class="btn-danger" onclick="logout()">🚪 Logout</button>
             </div>
         </div>
     </div>
 
     <script>
+        // ==================== CONFIG ====================
+        const API_URL = 'http://localhost:3000';
+
         // ==================== DATA MANAGEMENT ====================
         const DB_KEY = 'keyGeneratorDB';
         const ADMIN_KEY = 'adminCredentials';
         const SESSION_KEY = 'currentSession';
 
-        // Default credentials
-        const DEFAULT_ADMIN = {
-            username: 'admin',
-            password: 'Admin123!'
-        };
+        const DEFAULT_ADMIN = { username: 'admin', password: 'Admin123!' };
+        const DEFAULT_USER = { username: 'user', password: 'User123' };
 
-        const DEFAULT_USER = {
-            username: 'user',
-            password: 'User123'
-        };
-
-        // Initialize database
         function initDatabase() {
             if (!localStorage.getItem(DB_KEY)) {
                 localStorage.setItem(DB_KEY, JSON.stringify({
@@ -868,60 +764,50 @@
                     users: [DEFAULT_USER]
                 }));
             }
-
             if (!localStorage.getItem(ADMIN_KEY)) {
                 localStorage.setItem(ADMIN_KEY, JSON.stringify(DEFAULT_ADMIN));
             }
         }
 
-        // Get database
         function getDB() {
             return JSON.parse(localStorage.getItem(DB_KEY)) || { keys: [], users: [] };
         }
 
-        // Save database
         function saveDB(db) {
             localStorage.setItem(DB_KEY, JSON.stringify(db));
         }
 
-        // Get admin credentials
         function getAdminCreds() {
             return JSON.parse(localStorage.getItem(ADMIN_KEY)) || DEFAULT_ADMIN;
         }
 
-        // Save admin credentials
         function saveAdminCreds(creds) {
             localStorage.setItem(ADMIN_KEY, JSON.stringify(creds));
         }
 
-        // Get current session
         function getSession() {
             const session = localStorage.getItem(SESSION_KEY);
             return session ? JSON.parse(session) : null;
         }
 
-        // Set session
         function setSession(user, role) {
             localStorage.setItem(SESSION_KEY, JSON.stringify({ user, role, timestamp: Date.now() }));
         }
 
-        // Clear session
         function clearSession() {
             localStorage.removeItem(SESSION_KEY);
         }
 
-        // ==================== AUTHENTICATION ====================
+        // ==================== INITIALIZATION ====================
         initDatabase();
         const currentSession = getSession();
 
         if (currentSession) {
-            if (currentSession.role === 'user') {
-                showUserDashboard();
-            } else if (currentSession.role === 'admin') {
-                showAdminDashboard();
-            }
+            if (currentSession.role === 'user') showUserDashboard();
+            else if (currentSession.role === 'admin') showAdminDashboard();
         }
 
+        // ==================== UI HELPERS ====================
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);
             const eye = event.target;
@@ -929,24 +815,37 @@
             eye.textContent = field.type === 'password' ? '👁️' : '👁️‍🗨️';
         }
 
-        function switchLoginTab(tab) {
+        function switchLoginTab(e, tab) {
+            e.preventDefault();
             document.querySelectorAll('#loginSection .tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('#loginSection .tab-content').forEach(content => content.classList.remove('active'));
-            event.target.classList.add('active');
+            e.target.classList.add('active');
             document.getElementById(tab).classList.add('active');
         }
 
-        function switchAdminTab(tab) {
-            const tabs = document.querySelectorAll('#adminDashboard .tab-btn');
-            const contents = document.querySelectorAll('#adminDashboard .tab-content');
-            
-            contents.forEach(c => c.classList.remove('active'));
-            tabs.forEach(t => t.classList.remove('active'));
-            
-            event.target.classList.add('active');
+        function switchAdminTab(e, tab) {
+            e.preventDefault();
+            document.querySelectorAll('#adminDashboard .tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('#adminDashboard .tab-content').forEach(content => content.classList.remove('active'));
+            e.target.classList.add('active');
             document.getElementById(tab).classList.add('active');
         }
 
+        function selectKeyType(e, type) {
+            const parent = e.target.closest('.key-type-selector');
+            parent.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
+            e.target.closest('.type-option').classList.add('selected');
+            document.getElementById('selectedKeyType').value = type;
+        }
+
+        function selectAdminKeyType(e, type) {
+            const parent = e.target.closest('.key-type-selector');
+            parent.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
+            e.target.closest('.type-option').classList.add('selected');
+            document.getElementById('selectedAdminKeyType').value = type;
+        }
+
+        // ==================== AUTHENTICATION ====================
         function userLogin() {
             const username = document.getElementById('userUsername').value.trim();
             const password = document.getElementById('userPassword').value;
@@ -1013,26 +912,13 @@
             document.querySelectorAll('input[type="text"], input[type="password"], input[type="number"]').forEach(input => input.value = '');
         }
 
-        // ==================== KEY TYPE SELECTION ====================
-        function selectKeyType(type) {
-            document.querySelectorAll('#userDashboard .type-option').forEach(opt => opt.classList.remove('selected'));
-            event.target.closest('.type-option').classList.add('selected');
-            document.getElementById('selectedKeyType').value = type;
-        }
-
-        function selectAdminKeyType(type) {
-            document.querySelectorAll('#adminDashboard .type-option').forEach(opt => opt.classList.remove('selected'));
-            event.target.closest('.type-option').classList.add('selected');
-            document.getElementById('selectedAdminKeyType').value = type;
-        }
-
         // ==================== KEY GENERATION ====================
         let currentUserKey = null;
 
         function userGenerateKey() {
             const days = parseInt(document.getElementById('userDaysInput').value) || 2;
             const keyType = document.getElementById('selectedKeyType').value;
-            
+
             if (days < 1 || days > 365) {
                 showStatus(document.getElementById('userStatus'), '❌ Enter days between 1-365', 'error');
                 return;
@@ -1044,7 +930,7 @@
         function adminGenerateKey() {
             const days = parseInt(document.getElementById('adminDaysInput').value) || 2;
             const keyType = document.getElementById('selectedAdminKeyType').value;
-            
+
             if (days < 1 || days > 365) {
                 showStatus(document.getElementById('adminStatus'), '❌ Enter days between 1-365', 'error');
                 return;
@@ -1104,13 +990,8 @@
             for (let i = 0; i < 24; i++) {
                 randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            
-            if (keyType === 'free') {
-                return `Free${randomPart}`;
-            } else if (keyType === 'premium') {
-                return `Prem${randomPart}`;
-            }
-            return randomPart;
+            const keyPrefix = keyType === 'free' ? 'Free' : 'Prem';
+            return keyPrefix + randomPart;
         }
 
         function updateExpiryDisplay() {
@@ -1122,13 +1003,7 @@
             const daysLeft = Math.floor(timeLeft / (24 * 60 * 60 * 1000));
             const hoursLeft = Math.floor((timeLeft % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
 
-            const percent = Math.max(0, Math.min(100, (timeLeft / (7 * 24 * 60 * 60 * 1000)) * 100));
-            document.getElementById('userProgressFill').style.width = percent + '%';
-
-            const expiryText = timeLeft > 0
-                ? `Expires in ${daysLeft}d ${hoursLeft}h`
-                : 'Key Expired';
-
+            const expiryText = timeLeft > 0 ? `Expires in ${daysLeft}d ${hoursLeft}h` : 'Key Expired';
             document.getElementById('userExpiryInfo').textContent = '⏱️ ' + expiryText;
         }
 
@@ -1143,7 +1018,7 @@
         }
 
         // ==================== KEY VERIFICATION ====================
-        function verifyKey() {
+        async function verifyKey() {
             const keyInput = document.getElementById('verifyKeyInput').value.trim();
             const statusEl = document.getElementById('verifyStatus');
             const resultEl = document.getElementById('verifyResult');
@@ -1154,67 +1029,47 @@
                 return;
             }
 
-            const db = getDB();
-            const keyData = db.keys.find(k => k.key === keyInput);
+            showStatus(statusEl, '<span class="spinner"></span>Verifying key...', 'loading');
 
-            resultEl.classList.remove('verification-success', 'verification-error');
+            try {
+                const response = await fetch(`${API_URL}/api/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: keyInput })
+                });
 
-            if (!keyData) {
-                resultEl.classList.add('verification-error');
-                resultContent.innerHTML = `
-                    <p><strong>❌ Key Not Found</strong></p>
-                    <p>The key you entered does not exist in our system.</p>
-                `;
-                resultEl.classList.add('show');
-                showStatus(statusEl, '❌ Key verification failed', 'error');
-                return;
+                const result = await response.json();
+
+                resultEl.classList.remove('verification-success', 'verification-error');
+
+                if (result.success) {
+                    const data = result.data;
+                    const typeIcon = data.type === 'free' ? '🆓' : '👑';
+                    const typeLabel = data.type === 'free' ? 'FREE' : 'PREMIUM';
+
+                    resultEl.classList.add('verification-success');
+                    resultContent.innerHTML = `
+                        <p><strong>✅ Key Valid and Active</strong></p>
+                        <p><strong>Type:</strong> ${typeIcon} ${typeLabel}</p>
+                        <p><strong>User:</strong> ${data.user}</p>
+                        <p><strong>Created:</strong> ${new Date(data.createdAt).toLocaleString()}</p>
+                        <p><strong>Expires:</strong> ${new Date(data.expiresAt).toLocaleString()}</p>
+                        <p><strong>Time Remaining:</strong> ${data.timeRemaining}</p>
+                    `;
+                    resultEl.classList.add('show');
+                    showStatus(statusEl, '✅ Key is valid!', 'success');
+                } else {
+                    resultEl.classList.add('verification-error');
+                    resultContent.innerHTML = `
+                        <p><strong>❌ ${result.message}</strong></p>
+                    `;
+                    resultEl.classList.add('show');
+                    showStatus(statusEl, '❌ ' + result.message, 'error');
+                }
+            } catch (error) {
+                resultEl.classList.remove('show');
+                showStatus(statusEl, `❌ Error: ${error.message}. Make sure backend is running!`, 'error');
             }
-
-            const expiresAt = new Date(keyData.expiresAt);
-            const now = new Date();
-            const isExpired = expiresAt <= now;
-
-            if (keyData.status === 'revoked') {
-                resultEl.classList.add('verification-error');
-                resultContent.innerHTML = `
-                    <p><strong>❌ Key Revoked</strong></p>
-                    <p>This key has been revoked and cannot be used.</p>
-                `;
-                resultEl.classList.add('show');
-                showStatus(statusEl, '❌ Key has been revoked', 'error');
-                return;
-            }
-
-            if (isExpired) {
-                resultEl.classList.add('verification-error');
-                resultContent.innerHTML = `
-                    <p><strong>❌ Key Expired</strong></p>
-                    <p>Expiration Date: ${expiresAt.toLocaleString()}</p>
-                `;
-                resultEl.classList.add('show');
-                showStatus(statusEl, '❌ Key has expired', 'error');
-                return;
-            }
-
-            const timeLeft = expiresAt - now;
-            const daysLeft = Math.floor(timeLeft / (24 * 60 * 60 * 1000));
-            const hoursLeft = Math.floor((timeLeft % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-
-            const typeIcon = keyData.type === 'free' ? '🆓' : '👑';
-            const typeLabel = keyData.type === 'free' ? 'FREE' : 'PREMIUM';
-
-            resultEl.classList.add('verification-success');
-            resultContent.innerHTML = `
-                <p><strong>✅ Key Valid</strong></p>
-                <p><strong>Type:</strong> ${typeIcon} ${typeLabel}</p>
-                <p><strong>User:</strong> ${keyData.user}</p>
-                <p><strong>Created:</strong> ${new Date(keyData.createdAt).toLocaleString()}</p>
-                <p><strong>Expires:</strong> ${expiresAt.toLocaleString()}</p>
-                <p><strong>Time Remaining:</strong> ${daysLeft}d ${hoursLeft}h</p>
-                <p><strong>Status:</strong> ✓ Active</p>
-            `;
-            resultEl.classList.add('show');
-            showStatus(statusEl, '✅ Key is valid and active!', 'success');
         }
 
         // ==================== ADMIN MANAGEMENT ====================
@@ -1354,15 +1209,13 @@
         function showStatus(element, message, type) {
             element.innerHTML = message;
             element.className = 'status-message show';
-            
+
             if (type === 'error') element.classList.add('status-error');
             else if (type === 'success') element.classList.add('status-success');
             else if (type === 'loading') element.classList.add('status-loading');
 
             if (type !== 'loading') {
-                setTimeout(() => {
-                    element.classList.remove('show');
-                }, 5000);
+                setTimeout(() => element.classList.remove('show'), 5000);
             }
         }
     </script>
